@@ -1,4 +1,5 @@
 "use client";
+//x
 
 import { useState } from "react";
 import { PinataSDK } from "pinata-web3";
@@ -59,7 +60,6 @@ export default function Home() {
     }
   };
 
-  // ... existing code ...
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-900 text-white p-8 rounded-lg shadow-lg">
     <PageTransition>
