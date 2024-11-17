@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { PinataSDK } from "pinata";
+import { PinataSDK } from "pinata-web3";
 import Link from "next/link"
 
 
@@ -40,29 +40,20 @@ export default function Home() {
 
       const upload = await pinata.upload.file(file);
       console.log(upload);
-      const image = await pinata.gateways.get("bafkreib2a45vprvdaw4zvvgq4maiml7us2bksvgqk5icmqj3viapxxfo7u",);
-      console.log(image);
-      console.log("test");
 
-      const fileA = await pinata.gateways.get(upload.cid);
+      const fileA = await pinata.gateways.get(upload.IpfsHash);
 
       console.log(fileA);
-      
+
 
       // Set the CID in the state
-      setCid(upload.cid);
+      setCid(upload.IpfsHash);
 
       // Clear the file and imageURL after uploading
       setFile(null);
       setImageURL(null);
 
       // Generate URL
-      const newURL = await pinata.gateways.createSignedURL({
-        cid: upload.cid,
-        expires: 30,
-      });
-
-      console.log(newURL);
 
     } catch (error) {
       console.log(error);

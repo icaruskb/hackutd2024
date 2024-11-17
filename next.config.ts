@@ -1,8 +1,11 @@
-import type { NextConfig } from "next";
-
-require('dotenv').config();
-const nextConfig: NextConfig = {
-
+// next.config.js
+module.exports = {
+  async rewrites() {
+      return [
+        {
+          source: '/api/:path*',
+          destination: 'https://api.example.com/:path*',
+        },
+      ]
+    },
 };
-
-export default nextConfig;
