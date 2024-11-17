@@ -13,6 +13,7 @@ export default function Home() {
   const [file, setFile] = useState<File | null>(null);
   const [cid, setCid] = useState<string | null>(null);
 
+
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = event.target.files?.[0];
     if (selectedFile) {
