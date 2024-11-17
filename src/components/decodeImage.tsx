@@ -1,84 +1,93 @@
+// hackutd2024/src/components/decodeImage.tsx
 "use client";
 
-//xx
 import { useState } from "react";
-import Link from "next/link";
 import { PinataSDK } from "pinata-web3";
-
-
-
-const JWT = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySW5mb3JtYXRpb24iOnsiaWQiOiIxM2UzZDlmMi01ZDhhLTRkODktYWU5Ny1hM2MyYzBlOTE1MTAiLCJlbWFpbCI6InJhcGhhZWxqY28wOUBnbWFpbC5jb20iLCJlbWFpbF92ZXJpZmllZCI6dHJ1ZSwicGluX3BvbGljeSI6eyJyZWdpb25zIjpbeyJkZXNpcmVkUmVwbGljYXRpb25Db3VudCI6MSwiaWQiOiJGUkExIn0seyJkZXNpcmVkUmVwbGljYXRpb25Db3VudCI6MSwiaWQiOiJOWUMxIn1dLCJ2ZXJzaW9uIjoxfSwibWZhX2VuYWJsZWQiOmZhbHNlLCJzdGF0dXMiOiJBQ1RJVkUifSwiYXV0aGVudGljYXRpb25UeXBlIjoic2NvcGVkS2V5Iiwic2NvcGVkS2V5S2V5IjoiNzc0MDNjNGNmZmY4NzU4NTE3MjUiLCJzY29wZWRLZXlTZWNyZXQiOiIzN2U1NGFiZjQxYTU5ZGQyZWUzMWVjYjE5OWNlNzkzMjcwYmMyMGJlYjRhZTllYWZkZWFjMDc0NmZkYjVmM2E0IiwiZXhwIjoxNzYzMzMxNjE4fQ.AAxb2vOqRvL5wjPxttjZ2cozwEVN59Hq0TKwQosZ_Q8";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 const pinata = new PinataSDK({
-  pinataJwt: JWT,
+  pinataJwt: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySW5mb3JtYXRpb24iOnsiaWQiOiIxM2UzZDlmMi01ZDhhLTRkODktYWU5Ny1hM2MyYzBlOTE1MTAiLCJlbWFpbCI6InJhcGhhZWxqY28wOUBnbWFpbC5jb20iLCJlbWFpbF92ZXJpZmllZCI6dHJ1ZSwicGluX3BvbGljeSI6eyJyZWdpb25zIjpbeyJkZXNpcmVkUmVwbGljYXRpb25Db3VudCI6MSwiaWQiOiJGUkExIn0seyJkZXNpcmVkUmVwbGljYXRpb25Db3VudCI6MSwiaWQiOiJOWUMxIn1dLCJ2ZXJzaW9uIjoxfSwibWZhX2VuYWJsZWQiOmZhbHNlLCJzdGF0dXMiOiJBQ1RJVkUifSwiYXV0aGVudGljYXRpb25UeXBlIjoic2NvcGVkS2V5Iiwic2NvcGVkS2V5S2V5IjoiNzc0MDNjNGNmZmY4NzU4NTE3MjUiLCJzY29wZWRLZXlTZWNyZXQiOiIzN2U1NGFiZjQxYTU5ZGQyZWUzMWVjYjE5OWNlNzkzMjcwYmMyMGJlYjRhZTllYWZkZWFjMDc0NmZkYjVmM2E0IiwiZXhwIjoxNzYzMzMxNjE4fQ.AAxb2vOqRvL5wjPxttjZ2cozwEVN59Hq0TKwQosZ_Q8",
   pinataGateway: "plum-immediate-parrotfish-603.mypinata.cloud",
 });
 
 export default function DecodeImage() {
-  const [cid, setCid] = useState("");
+  const [cid, setCid] = useState<string | null>(null);
   const [imageSrc, setImageSrc] = useState<string | null>(null);
 
-  const decodeFromPinata = async () => {
+  const handleDecode = async () => {
     if (!cid) {
-      alert("Please Enter a CID");
+      console.log("CID is required to decode the image.");
       return;
     }
 
     try {
-
-      const response = await pinata.gateways.get(cid);
-      if (response.contentType && response.contentType.startsWith("image/")) {
-        // Check if response.data is a Blob or ArrayBuffer
-        let data: BlobPart;
-
-        if (response.data instanceof Blob) {
-          data = response.data; // If it's already a Blob, use it directly
-        } else if (typeof response.data === "string") {
-          data = new Blob([response.data], { type: response.contentType }); // Convert string to Blob
-        } else {
-          // If it's JSON or another type, handle accordingly
-          console.error("Unexpected data type:", typeof response.data);
-          alert("The CID does not point to a valid image.");
-          return;
-        }
-
-        const blob = new Blob([data], { type: response.contentType });
-        const url = URL.createObjectURL(blob);
-        setImageSrc(url);
-      } else {
-        alert("The CID does not point to an image or content type is invalid.");
+      // Replace with your actual logic to fetch the image from IPFS using the CID
+      const response = await fetch(`https://ipfs.io/ipfs/${cid}`);
+      if (!response.ok) {
+        throw new Error("Failed to fetch image");
       }
+      const blob = await response.blob();
+      const url = URL.createObjectURL(blob);
+      setImageSrc(url);
     } catch (error) {
-      console.error("Error fetching from Pinata:", error);
+      console.error("Error decoding image:", error);
     }
   };
 
-  return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-black text-white p-8">
+  const handleBurn = async () => {
+    if (!cid) {
+      console.log("CID is required to burn the image.");
+      return;
+    }
+    await pinata.unpin([cid]);
+    setImageSrc(null);
+    setCid(null);
+  };
 
-      <h1>Image Decoder</h1>
+  return (
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-900 text-white p-8 rounded-lg shadow-lg">
+      <h1 className="text-2xl font-semibold mb-4">Decode Your Image</h1>
       <input
         type="text"
-        value={cid}
+        value={cid || ""}
         onChange={(e) => setCid(e.target.value)}
         placeholder="Enter CID"
-        className="mb-4 p-2 bg-gray-800 text-white border border-gray-800 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+        className="mb-4 p-2 bg-gray-800 text-white border border-gray-600 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
       />
-      <button
-        onClick={decodeFromPinata}
-        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mb-2"
+      <Button
+        onClick={handleDecode}
+        className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition duration-200 mb-4"
       >
-        Decode
-      </button>
+        Decode Image
+      </Button>
+      <Button
+        onClick={handleBurn}
+        className="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded transition duration-200"
+      >
+        Burn Image
+      </Button>
       {imageSrc && (
-        <img src={imageSrc} alt="Decoded from Pinata" className="mt-4" />
+        <div className="border-4 border-blue-500 w-64 h-64 flex items-center justify-center mb-4 rounded-lg overflow-hidden">
+          <img src={imageSrc} alt="Decoded" className="w-full h-full object-cover" />
+        </div>
       )}
       <Link href="./">
-        <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+        <Button className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition duration-200 mb-4">
           Upload Image
-        </button>
+        </Button>
       </Link>
-
+      {/* Footer Section */}
+      <footer className="mt-8 w-full text-center">
+        <div className="border-t border-gray-700 pt-4">
+          <p className="text-gray-400">Connect with us:</p>
+          <div className="flex justify-center space-x-4 mt-2">
+            <a href="https://github.com/yourusername" target="_blank" rel="noopener noreferrer" className="text-blue-300 hover:underline">GitHub</a>
+            <a href="https://twitter.com/yourusername" target="_blank" rel="noopener noreferrer" className="text-blue-300 hover:underline">Twitter</a>
+            <a href="https://linkedin.com/in/yourusername" target="_blank" rel="noopener noreferrer" className="text-blue-300 hover:underline">LinkedIn</a>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }
