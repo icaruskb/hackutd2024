@@ -5,7 +5,8 @@ import { useState } from "react";
 import { PinataSDK } from "pinata-web3";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-
+import Header from "@/components/header";
+import Footer from "./footer";
 const pinata = new PinataSDK({
   pinataJwt: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySW5mb3JtYXRpb24iOnsiaWQiOiIxM2UzZDlmMi01ZDhhLTRkODktYWU5Ny1hM2MyYzBlOTE1MTAiLCJlbWFpbCI6InJhcGhhZWxqY28wOUBnbWFpbC5jb20iLCJlbWFpbF92ZXJpZmllZCI6dHJ1ZSwicGluX3BvbGljeSI6eyJyZWdpb25zIjpbeyJkZXNpcmVkUmVwbGljYXRpb25Db3VudCI6MSwiaWQiOiJGUkExIn0seyJkZXNpcmVkUmVwbGljYXRpb25Db3VudCI6MSwiaWQiOiJOWUMxIn1dLCJ2ZXJzaW9uIjoxfSwibWZhX2VuYWJsZWQiOmZhbHNlLCJzdGF0dXMiOiJBQ1RJVkUifSwiYXV0aGVudGljYXRpb25UeXBlIjoic2NvcGVkS2V5Iiwic2NvcGVkS2V5S2V5IjoiNzc0MDNjNGNmZmY4NzU4NTE3MjUiLCJzY29wZWRLZXlTZWNyZXQiOiIzN2U1NGFiZjQxYTU5ZGQyZWUzMWVjYjE5OWNlNzkzMjcwYmMyMGJlYjRhZTllYWZkZWFjMDc0NmZkYjVmM2E0IiwiZXhwIjoxNzYzMzMxNjE4fQ.AAxb2vOqRvL5wjPxttjZ2cozwEVN59Hq0TKwQosZ_Q8",
   pinataGateway: "plum-immediate-parrotfish-603.mypinata.cloud",
@@ -47,12 +48,14 @@ export default function DecodeImage() {
     }
     setErrorMessage(null);
     await pinata.unpin([cid]);
+    setErrorMessage("Image has been burned.");
     setImageSrc(null);
     setCid(null);
   };
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-900 text-white p-8 rounded-lg shadow-lg">
+      <Header />
       <h1 className="text-2xl font-semibold mb-4">Decode Your Image</h1>
       <input
         type="text"
@@ -86,17 +89,7 @@ export default function DecodeImage() {
           <img src={imageSrc} alt="Decoded" className="w-full h-full object-cover" />
         </div>
       )}
-      {/* Footer Section */}
-      <footer className="mt-8 w-full text-center">
-        <div className="border-t border-gray-700 pt-4">
-          <p className="text-gray-400">Connect with us:</p>
-          <div className="flex justify-center space-x-4 mt-2">
-            <a href="https://github.com/yourusername" target="_blank" rel="noopener noreferrer" className="text-blue-300 hover:underline">GitHub</a>
-            <a href="https://twitter.com/yourusername" target="_blank" rel="noopener noreferrer" className="text-blue-300 hover:underline">Twitter</a>
-            <a href="https://linkedin.com/in/yourusername" target="_blank" rel="noopener noreferrer" className="text-blue-300 hover:underline">LinkedIn</a>
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 }
