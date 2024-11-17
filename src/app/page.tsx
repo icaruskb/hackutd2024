@@ -37,8 +37,12 @@ export default function Home() {
       return;
     }
     try {
+
       const upload = await pinata.upload.file(file);
       console.log(upload);
+      const image = await pinata.gateways.get("bafkreib2a45vprvdaw4zvvgq4maiml7us2bksvgqk5icmqj3viapxxfo7u",);
+      console.log(image);
+      console.log("test");
 
       // Set the CID in the state
       setCid(upload.cid);
