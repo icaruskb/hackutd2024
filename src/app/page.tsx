@@ -44,6 +44,11 @@ export default function Home() {
       console.log(image);
       console.log("test");
 
+      const fileA = await pinata.gateways.get(upload.cid);
+
+      console.log(fileA);
+      
+
       // Set the CID in the state
       setCid(upload.cid);
 
