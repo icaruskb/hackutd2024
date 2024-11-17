@@ -3,5 +3,6 @@ export default function decodeImagePage() {
   return (
     <DecodeImage />
     //x
+    //s
   );
 }
