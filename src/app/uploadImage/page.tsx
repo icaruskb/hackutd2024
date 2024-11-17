@@ -12,12 +12,7 @@ const pinata = new PinataSDK({
 });
 
 const decodeFromPinata = async () => {
-  try {
-    const file = await pinata.gateways.get("bafybeigkky3humuusv3o6ktglazybje3cc7wghsyjjgmcgpqaes347flxu");
-    console.log(file);
-  } catch (error) {
-    console.error("Error fetching from Pinata:", error);
-  }
+  // implement getting the image
 };
 
 export default function uploadImage() {
