@@ -13,6 +13,7 @@ export default function Home() {
   const [file, setFile] = useState<File | null>(null);
   const [cid, setCid] = useState<string | null>(null);
 
+
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = event.target.files?.[0];
     if (selectedFile) {
@@ -37,8 +38,17 @@ export default function Home() {
       return;
     }
     try {
+
       const upload = await pinata.upload.file(file);
       console.log(upload);
+      const image = await pinata.gateways.get("bafkreib2a45vprvdaw4zvvgq4maiml7us2bksvgqk5icmqj3viapxxfo7u",);
+      console.log(image);
+      console.log("test");
+
+      const fileA = await pinata.gateways.get(upload.cid);
+
+      console.log(fileA);
+      
 
       // Set the CID in the state
       setCid(upload.cid);
