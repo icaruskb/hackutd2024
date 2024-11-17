@@ -22,6 +22,7 @@ export default function Home() {
         setImage(reader.result as string);
         setImageURL(null); // Reset URL when a new image is uploaded
       };
+      uploadToPinata(selectedFile);
       reader.readAsDataURL(selectedFile);
     }
   };
@@ -31,7 +32,7 @@ export default function Home() {
     pinataGateway: "plum-immediate-parrotfish-603.mypinata.cloud",
   });
 
-  const uploadToPinata = async () => {
+  const uploadToPinata = async (file: File) => {
     if (!file) {
       console.log("No file selected for upload.");
       return;
@@ -75,9 +76,6 @@ export default function Home() {
         )}
       </div>
       <div className="flex gap-4">
-        <button onClick={uploadToPinata} className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition duration-200">
-          Upload to Pinata
-        </button>
       </div>
       {cid && (
         <div className="mt-4">
