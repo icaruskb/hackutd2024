@@ -25,16 +25,26 @@ export default function DecodeImage() {
     try {
 
       const response = await pinata.gateways.get(cid);
-      if (!response.contentType || !response.data) {
-        alert("The CID does not point to an image.");
-        return;
-      }
-      if (response.contentType.startsWith("image/")) {
-        const blob = new Blob([response.data], { type: response.contentType });
+      if (response.contentType && response.contentType.startsWith("image/")) {
+        // Check if response.data is a Blob or ArrayBuffer
+        let data: BlobPart;
+
+        if (response.data instanceof Blob) {
+          data = response.data; // If it's already a Blob, use it directly
+        } else if (typeof response.data === "string") {
+          data = new Blob([response.data], { type: response.contentType }); // Convert string to Blob
+        } else {
+          // If it's JSON or another type, handle accordingly
+          console.error("Unexpected data type:", typeof response.data);
+          alert("The CID does not point to a valid image.");
+          return;
+        }
+
+        const blob = new Blob([data], { type: response.contentType });
         const url = URL.createObjectURL(blob);
         setImageSrc(url);
       } else {
-        alert("The CID does not point to an image.");
+        alert("The CID does not point to an image or content type is invalid.");
       }
     } catch (error) {
       console.error("Error fetching from Pinata:", error);
