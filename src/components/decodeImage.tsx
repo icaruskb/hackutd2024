@@ -14,12 +14,16 @@ const pinata = new PinataSDK({
 export default function DecodeImage() {
   const [cid, setCid] = useState<string | null>(null);
   const [imageSrc, setImageSrc] = useState<string | null>(null);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
 
   const handleDecode = async () => {
     if (!cid) {
       console.log("CID is required to decode the image.");
+      setErrorMessage("CID is required to decode the image.");
       return;
     }
+    setErrorMessage(null); // Clear error message if CID is present
 
     try {
       // Replace with your actual logic to fetch the image from IPFS using the CID
@@ -38,8 +42,10 @@ export default function DecodeImage() {
   const handleBurn = async () => {
     if (!cid) {
       console.log("CID is required to burn the image.");
+      setErrorMessage("CID is required to burn the image.");
       return;
     }
+    setErrorMessage(null);
     await pinata.unpin([cid]);
     setImageSrc(null);
     setCid(null);
@@ -54,29 +60,32 @@ export default function DecodeImage() {
         onChange={(e) => setCid(e.target.value)}
         placeholder="Enter CID"
         className="mb-4 p-2 bg-gray-800 text-white border border-gray-600 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-      />
+        />
+        {errorMessage && (
+        <p className="text-red-500 mb-4">{errorMessage}</p>
+      )}
       <Button
         onClick={handleDecode}
-        className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition duration-200 mb-4"
-      >
+        className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition duration-200 mb-2"
+        >
         Decode Image
       </Button>
       <Button
         onClick={handleBurn}
-        className="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded transition duration-200"
+        className="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded transition duration-200 mb-2"
       >
         Burn Image
       </Button>
+      <Link href="./">
+        <Button className="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded transition duration-200 mb-2">
+          Upload Image
+        </Button>
+      </Link>
       {imageSrc && (
         <div className="border-4 border-blue-500 w-64 h-64 flex items-center justify-center mb-4 rounded-lg overflow-hidden">
           <img src={imageSrc} alt="Decoded" className="w-full h-full object-cover" />
         </div>
       )}
-      <Link href="./">
-        <Button className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition duration-200 mb-4">
-          Upload Image
-        </Button>
-      </Link>
       {/* Footer Section */}
       <footer className="mt-8 w-full text-center">
         <div className="border-t border-gray-700 pt-4">

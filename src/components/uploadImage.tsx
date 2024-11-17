@@ -1,4 +1,3 @@
-// hackutd2024/src/components/uploadImage.tsx
 "use client";
 
 import { useState } from "react";
@@ -69,7 +68,7 @@ export default function UploadImage() {
         </div>
       )}
       <Link href="/DecodeImage">
-        <Button className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition duration-200 mt-4">
+        <Button className="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded transition duration-200 mt-4">
           Decode Image
         </Button>
       </Link>
