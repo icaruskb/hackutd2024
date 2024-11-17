@@ -10,7 +10,7 @@ export default function DecodeImage() {
 
  return(
   <div className="flex flex-col items-center justify-center min-h-screen bg-black text-white p-8">
-      Enter your CID
+      Enter your IPFS Hash
       
       <input className="text-black" type="text" placeholder="Enter text here" />
       <button className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
